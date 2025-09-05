@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/clock/static/css/main.0f1d4b28.css",
-    "main.js": "/clock/static/js/main.1cf5740c.js",
+    "main.js": "/clock/static/js/main.01be9806.js",
     "index.html": "/clock/index.html",
     "main.0f1d4b28.css.map": "/clock/static/css/main.0f1d4b28.css.map",
-    "main.1cf5740c.js.map": "/clock/static/js/main.1cf5740c.js.map"
+    "main.01be9806.js.map": "/clock/static/js/main.01be9806.js.map"
   },
   "entrypoints": [
     "static/css/main.0f1d4b28.css",
-    "static/js/main.1cf5740c.js"
+    "static/js/main.01be9806.js"
   ]
 }
