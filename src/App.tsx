@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import ConfigPage from './components/ConfigPage';
+import TrainingPage from './components/TrainingPage';
 import './App.css';
 
 function App() {
+  const [trainingStarted, setTrainingStarted] = useState(false);
+  const [trainingConfig, setTrainingConfig] = useState<any>(null);
+
+  const handleStartTraining = (config: any) => {
+    setTrainingConfig(config);
+    setTrainingStarted(true);
+  };
+
+  const handleStopTraining = () => {
+    setTrainingStarted(false);
+    setTrainingConfig(null);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {trainingStarted ? (
+        <TrainingPage config={trainingConfig} onStop={handleStopTraining} />
+      ) : (
+        <ConfigPage onStart={handleStartTraining} />
+      )}
     </div>
   );
 }
