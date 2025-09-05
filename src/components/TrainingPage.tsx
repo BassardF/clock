@@ -17,59 +17,80 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
   const [phaseTimeRemaining, setPhaseTimeRemaining] = useState(config.inhale);
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
+  const phaseStartTimeRef = useRef<number | null>(null); // Store the time when the current phase started
+  const sessionStartTimeRef = useRef<number | null>(null); // Store the time when the session started
 
   const cycleDuration = config.inhale + config.holdFull + config.exhale + config.holdEmpty;
 
   const animate = (time: number) => {
-    if (lastTimeRef.current !== null) {
-      const deltaTime = time - lastTimeRef.current;
+    if (phaseStartTimeRef.current === null) {
+      phaseStartTimeRef.current = time; // Set start time for the first frame of the phase
+    }
+    if (sessionStartTimeRef.current === null) {
+      sessionStartTimeRef.current = time; // Set start time for the first frame of the session
+    }
 
-      setPhaseTimeRemaining((prev) => {
-        const newTime = prev - deltaTime / 1000;
-        if (newTime <= 0) {
-          let nextPhase = '';
-          let nextPhaseDuration = 0;
+    const elapsedInPhase = (time - phaseStartTimeRef.current) / 1000; // Elapsed time in current phase
 
-          switch (currentPhase) {
-            case 'Breath In':
-              nextPhase = 'Hold Full';
-              nextPhaseDuration = config.holdFull;
-              break;
-            case 'Hold Full':
-              nextPhase = 'Breath Out';
-              nextPhaseDuration = config.exhale;
-              break;
-            case 'Breath Out':
-              nextPhase = 'Hold Empty';
-              nextPhaseDuration = config.holdEmpty;
-              break;
-            case 'Hold Empty':
-              nextPhase = 'Breath In';
-              nextPhaseDuration = config.inhale;
-              break;
-          }
-          setCurrentPhase(nextPhase);
-          return nextPhaseDuration;
-        }
-        return newTime;
-      });
+    let currentPhaseDuration = 0;
+    switch (currentPhase) {
+      case 'Breath In': currentPhaseDuration = config.inhale; break;
+      case 'Hold Full': currentPhaseDuration = config.holdFull; break;
+      case 'Breath Out': currentPhaseDuration = config.exhale; break;
+      case 'Hold Empty': currentPhaseDuration = config.holdEmpty; break;
+    }
 
-      if (config.totalTime !== Infinity) {
-        setTimeRemaining((prev) => {
-          const newTotalTime = prev - deltaTime / 1000;
-          if (newTotalTime <= 0) {
-            onStop();
-            return 0;
-          }
-          return newTotalTime;
-        });
+    const newPhaseTimeRemaining = currentPhaseDuration - elapsedInPhase;
+
+    if (newPhaseTimeRemaining <= 0) {
+      // Phase transition logic
+      let nextPhase = '';
+      let nextPhaseDuration = 0;
+
+      switch (currentPhase) {
+        case 'Breath In':
+          nextPhase = 'Hold Full';
+          nextPhaseDuration = config.holdFull;
+          break;
+        case 'Hold Full':
+          nextPhase = 'Breath Out';
+          nextPhaseDuration = config.exhale;
+          break;
+        case 'Breath Out':
+          nextPhase = 'Hold Empty';
+          nextPhaseDuration = config.holdEmpty;
+          break;
+        case 'Hold Empty':
+          nextPhase = 'Breath In';
+          nextPhaseDuration = config.inhale;
+          break;
+      }
+      setCurrentPhase(nextPhase);
+      setPhaseTimeRemaining(nextPhaseDuration); // Set to the full duration of the next phase
+      phaseStartTimeRef.current = time; // Reset phase start time for the new phase
+    } else {
+      setPhaseTimeRemaining(newPhaseTimeRemaining);
+    }
+
+    if (config.totalTime !== Infinity) {
+      const elapsedInSession = (time - sessionStartTimeRef.current) / 1000; // Elapsed time in session
+      const newTotalTimeRemaining = config.totalTime - elapsedInSession;
+
+      if (newTotalTimeRemaining <= 0) {
+        onStop();
+        setTimeRemaining(0);
+      } else {
+        setTimeRemaining(newTotalTimeRemaining);
       }
     }
-    lastTimeRef.current = time;
+
     animationFrameRef.current = requestAnimationFrame(animate);
   };
 
   useEffect(() => {
+    // Reset phaseStartTimeRef and sessionStartTimeRef when currentPhase changes or component mounts
+    phaseStartTimeRef.current = null;
+    sessionStartTimeRef.current = null;
     animationFrameRef.current = requestAnimationFrame(animate);
     return () => {
       if (animationFrameRef.current) {
