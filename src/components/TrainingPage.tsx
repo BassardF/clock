@@ -33,18 +33,18 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
 
           switch (currentPhase) {
             case 'Breath In':
-              nextPhase = 'Hold';
+              nextPhase = 'Hold Full';
               nextPhaseDuration = config.holdFull;
               break;
-            case 'Hold':
+            case 'Hold Full':
               nextPhase = 'Breath Out';
               nextPhaseDuration = config.exhale;
               break;
             case 'Breath Out':
-              nextPhase = 'Hold';
+              nextPhase = 'Hold Empty';
               nextPhaseDuration = config.holdEmpty;
               break;
-            case 'Hold':
+            case 'Hold Empty':
               nextPhase = 'Breath In';
               nextPhaseDuration = config.inhale;
               break;
@@ -93,17 +93,27 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
       case 'Breath In':
         rotation = 0;
         break;
-      case 'Hold':
+      case 'Hold Full':
         rotation = (config.inhale / cycleDuration) * 360;
         break;
       case 'Breath Out':
         rotation = ((config.inhale + config.holdFull) / cycleDuration) * 360;
         break;
-      case 'Hold':
+      case 'Hold Empty':
         rotation = ((config.inhale + config.holdFull + config.exhale) / cycleDuration) * 360;
         break;
     }
     return rotation;
+  };
+
+  const getPhaseDuration = (phase: string) => {
+    switch (phase) {
+      case 'Breath In': return config.inhale;
+      case 'Hold Full': return config.holdFull;
+      case 'Breath Out': return config.exhale;
+      case 'Hold Empty': return config.holdEmpty;
+      default: return 1; // Fallback
+    }
   };
 
   const getElapsedTimeInCycle = () => {
@@ -112,20 +122,23 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
       case 'Breath In':
         elapsed = config.inhale - phaseTimeRemaining;
         break;
-      case 'Hold':
+      case 'Hold Full':
         elapsed = config.inhale + (config.holdFull - phaseTimeRemaining);
         break;
       case 'Breath Out':
         elapsed = config.inhale + config.holdFull + (config.exhale - phaseTimeRemaining);
         break;
-      case 'Hold':
+      case 'Hold Empty':
         elapsed = config.inhale + config.holdFull + config.exhale + (config.holdEmpty - phaseTimeRemaining);
         break;
     }
     return elapsed;
   };
 
-  const indicatorAngle = (getElapsedTimeInCycle() / cycleDuration) * 360 - 90;
+  const currentPhaseDuration = getPhaseDuration(currentPhase);
+  const progressInCurrentPhase = (currentPhaseDuration - phaseTimeRemaining) / currentPhaseDuration;
+
+  const indicatorAngle = getSegmentRotation(currentPhase) + (progressInCurrentPhase * (currentPhaseDuration / cycleDuration) * 360);
 
   const getLabelPosition = (phase: string) => {
     let startAngle = 0;
@@ -136,7 +149,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
         startAngle = 0;
         duration = config.inhale;
         break;
-      case 'Hold':
+      case 'Hold Full':
         startAngle = config.inhale;
         duration = config.holdFull;
         break;
@@ -144,7 +157,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
         startAngle = config.inhale + config.holdFull;
         duration = config.exhale;
         break;
-      case 'Hold':
+      case 'Hold Empty':
         startAngle = config.inhale + config.holdFull + config.exhale;
         duration = config.holdEmpty;
         break;
@@ -187,7 +200,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             r={radius}
             strokeDasharray={getSegmentDasharray(config.holdFull, cycleDuration)}
             strokeDashoffset={0}
-            transform={`rotate(${getSegmentRotation('Hold')} ${100} ${100})`}
+            transform={`rotate(${getSegmentRotation('Hold Full')} ${100} ${100})`}
           />
           <circle
             className="segment exhale-segment"
@@ -205,7 +218,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             r={radius}
             strokeDasharray={getSegmentDasharray(config.holdEmpty, cycleDuration)}
             strokeDashoffset={0}
-            transform={`rotate(${getSegmentRotation('Hold')} ${100} ${100})`}
+            transform={`rotate(${getSegmentRotation('Hold Empty')} ${100} ${100})`}
           />
 
           {/* Phase Labels */}
@@ -220,8 +233,8 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             Breath In
           </text>
           <text
-            x={getLabelPosition('Hold').x}
-            y={getLabelPosition('Hold').y}
+            x={getLabelPosition('Hold Full').x}
+            y={getLabelPosition('Hold Full').y}
             textAnchor="middle"
             dominantBaseline="middle"
             className="phase-label"
@@ -240,14 +253,14 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             Breath Out
           </text>
           <text
-            x={getLabelPosition('Hold').x}
-            y={getLabelPosition('Hold').y}
+            x={getLabelPosition('Hold Empty').x}
+            y={getLabelPosition('Hold Empty').y}
             textAnchor="middle"
             dominantBaseline="middle"
             className="phase-label"
             transform="rotate(90 100 100)"
           >
-            Hold
+            Empty
           </text>
 
           {/* Current position indicator */}
