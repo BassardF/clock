@@ -1,20 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
-
-interface TrainingPageProps {
-  config: {
-    totalTime: number;
-    inhale: number;
-    holdFull: number;
-    exhale: number;
-    holdEmpty: number;
-  };
-  onStop: () => void;
-}
-
 const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
   const [timeRemaining, setTimeRemaining] = useState(config.totalTime);
   const [currentPhase, setCurrentPhase] = useState('Breath In');
   const [phaseTimeRemaining, setPhaseTimeRemaining] = useState(config.inhale);
+  const [completedCycles, setCompletedCycles] = useState(0); // New state for completed cycles
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const phaseStartTimeRef = useRef<number | null>(null); // Store the time when the current phase started
@@ -63,6 +51,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
         case 'Hold Empty':
           nextPhase = 'Breath In';
           nextPhaseDuration = config.inhale;
+          setCompletedCycles(prev => prev + 1); // Increment completed cycles
           break;
       }
       setCurrentPhase(nextPhase);
@@ -119,7 +108,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
       case 'Hold Empty': currentPhaseDuration = config.holdEmpty; break;
     }
     const progress = 1 - (phaseTimeRemaining / currentPhaseDuration);
-    return progress * getPhaseWidth(currentPhase);
+    return progress * 100; // Return percentage from 0 to 100
   };
 
   const getCursorPosition = () => {
@@ -195,6 +184,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
         <div className="current-phase-display">
           <h2>{currentPhase}</h2>
           <p>Time in Phase: {phaseTimeRemaining.toFixed(1)}s</p>
+          <p>Completed Cycles: {completedCycles}</p>
         </div>
       </div>
       {config.totalTime !== Infinity && (
