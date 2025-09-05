@@ -78,7 +78,7 @@
   position: absolute;
   top: 0;
   width: 4px; /* Width of the cursor */
-  height: 100%; /* Height of the progress bar */
+  height: 40px; /* Height of the progress bar */
   background-color: white; /* Color of the cursor */
   transform: translateX(-50%); /* Center the cursor on its position */
   z-index: 2; /* Ensure it's above the progress bar */
