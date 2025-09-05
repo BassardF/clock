@@ -101,23 +101,33 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
     return progress * getPhaseWidth(currentPhase);
   };
 
-  const getOverallProgressWidth = () => {
-    let elapsedDuration = 0;
+  const getCursorPosition = () => {
+    let currentPhaseStartTime = 0; // Percentage of total width where current phase starts
+    let currentPhaseDuration = 0;
+
     switch (currentPhase) {
       case 'Breath In':
-        elapsedDuration = config.inhale - phaseTimeRemaining;
+        currentPhaseStartTime = 0;
+        currentPhaseDuration = config.inhale;
         break;
       case 'Hold Full':
-        elapsedDuration = config.inhale + (config.holdFull - phaseTimeRemaining);
+        currentPhaseStartTime = getPhaseWidth('Breath In');
+        currentPhaseDuration = config.holdFull;
         break;
       case 'Breath Out':
-        elapsedDuration = config.inhale + config.holdFull + (config.exhale - phaseTimeRemaining);
+        currentPhaseStartTime = getPhaseWidth('Breath In') + getPhaseWidth('Hold Full');
+        currentPhaseDuration = config.exhale;
         break;
       case 'Hold Empty':
-        elapsedDuration = config.inhale + config.holdFull + config.exhale + (config.holdEmpty - phaseTimeRemaining);
+        currentPhaseStartTime = getPhaseWidth('Breath In') + getPhaseWidth('Hold Full') + getPhaseWidth('Breath Out');
+        currentPhaseDuration = config.holdEmpty;
         break;
     }
-    return (elapsedDuration / cycleDuration) * 100; // Percentage of total width
+
+    const progressInCurrentPhase = (currentPhaseDuration - phaseTimeRemaining) / currentPhaseDuration;
+    const progressWidthInCurrentPhase = progressInCurrentPhase * getPhaseWidth(currentPhase);
+
+    return currentPhaseStartTime + progressWidthInCurrentPhase;
   };
 
   return (
@@ -150,7 +160,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             )}
           </div>
         </div>
-        <div className="cursor" style={{ left: `${getOverallProgressWidth()}%` }}></div>
+        <div className="cursor" style={{ left: `${getCursorPosition()}%` }}></div>
         <div className="current-phase-display">
           <h2>{currentPhase}</h2>
           <p>Time in Phase: {phaseTimeRemaining.toFixed(1)}s</p>
