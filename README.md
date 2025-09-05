@@ -22,8 +22,9 @@ This is the initial page where users define their breathwork session. It will in
 
 This page displays the active breathwork session with a visual timer:
 
-*   **Circular Timer:** A prominent circular timer representing one complete breath cycle. This circle will be dynamically divided into four segments, visually corresponding to the 'In', 'Full', 'Out', and 'Empty' breath parts configured on the previous page.
-*   **Real-time Progress:** The timer will animate to show progress through the current breath part and the overall cycle.
+*   **Circular Timer:** A prominent circular timer representing one complete breath cycle. This circle is divided into four static, colored segments, visually corresponding to the 'In', 'Full', 'Out', and 'Empty' breath parts. The timer starts at the 12 o'clock position.
+*   **Real-time Progress:** A moving cursor (indicator dot) travels along the circumference of the circle, showing the current position within the breath cycle. Each segment will also display a text label (e.g., "Inhale", "Hold").
+*   **Current Phase Indicator:** The center of the clock will display the name of the currently active breath phase (e.g., "Inhale", "Hold Full").
 *   **Cycle Repetition:** The timer will repeat for the duration of the 'Total Training Time' set on the Configuration Page.
 *   **Stop Functionality:** The ability to stop the training session at any moment.
 

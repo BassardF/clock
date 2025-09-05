@@ -86,19 +86,10 @@
   stroke-width: 10;
 }
 
-.timer-circle-progress {
-  fill: none;
-  stroke: #61dafb;
-  stroke-width: 10;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.1s linear; /* Smooth animation */
-}
-
 .segment {
   fill: none;
   stroke-width: 10;
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.1s linear;
 }
 
 .inhale-segment {
@@ -122,4 +113,17 @@
   font-size: 1.5em;
   font-weight: bold;
   transform: rotate(90deg); /* Counter-rotate text */
+}
+
+.phase-label {
+  fill: white;
+  font-size: 0.8em;
+  font-weight: bold;
+  transform: rotate(90deg); /* Counter-rotate text */
+}
+
+.indicator-dot {
+  fill: white;
+  stroke: #282c34;
+  stroke-width: 2;
 }
