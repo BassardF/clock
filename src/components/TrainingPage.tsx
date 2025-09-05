@@ -101,6 +101,25 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
     return progress * getPhaseWidth(currentPhase);
   };
 
+  const getOverallProgressWidth = () => {
+    let elapsedDuration = 0;
+    switch (currentPhase) {
+      case 'Breath In':
+        elapsedDuration = config.inhale - phaseTimeRemaining;
+        break;
+      case 'Hold Full':
+        elapsedDuration = config.inhale + (config.holdFull - phaseTimeRemaining);
+        break;
+      case 'Breath Out':
+        elapsedDuration = config.inhale + config.holdFull + (config.exhale - phaseTimeRemaining);
+        break;
+      case 'Hold Empty':
+        elapsedDuration = config.inhale + config.holdFull + config.exhale + (config.holdEmpty - phaseTimeRemaining);
+        break;
+    }
+    return (elapsedDuration / cycleDuration) * 100; // Percentage of total width
+  };
+
   return (
     <div className="training-page">
       <h1>Breathwork Session</h1>
@@ -131,6 +150,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             )}
           </div>
         </div>
+        <div className="cursor" style={{ left: `${getOverallProgressWidth()}%` }}></div>
         <div className="current-phase-display">
           <h2>{currentPhase}</h2>
           <p>Time in Phase: {phaseTimeRemaining.toFixed(1)}s</p>

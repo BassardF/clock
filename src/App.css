@@ -71,6 +71,18 @@
 .linear-timer-container {
   width: 100%;
   margin-top: 20px;
+  position: relative; /* Added for cursor positioning */
+}
+
+.cursor {
+  position: absolute;
+  top: 0;
+  width: 4px; /* Width of the cursor */
+  height: 100%; /* Height of the progress bar */
+  background-color: white; /* Color of the cursor */
+  transform: translateX(-50%); /* Center the cursor on its position */
+  z-index: 2; /* Ensure it's above the progress bar */
+  transition: left 0.1s linear; /* Smooth movement */
 }
 
 .progress-bar-segments {
@@ -93,6 +105,22 @@
   font-size: 0.9em;
   box-sizing: border-box;
   border-right: 1px solid rgba(0, 0, 0, 0.2); /* Separator between segments */
+}
+
+.inhale-segment-bar {
+  background-color: #66BB6A; /* Lighter Green */
+}
+
+.hold-full-segment-bar {
+  background-color: #FFD54F; /* Lighter Amber */
+}
+
+.exhale-segment-bar {
+  background-color: #EF5350; /* Lighter Red */
+}
+
+.hold-empty-segment-bar {
+  background-color: #42A5F5; /* Lighter Blue */
 }
 
 .segment-bar:last-child {
