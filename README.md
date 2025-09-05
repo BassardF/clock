@@ -2,7 +2,7 @@
 
 ## Project Goal
 
-This application aims to provide a customizable breathwork training tool. Users can configure their session parameters on a dedicated setup page, and then proceed to a training page featuring a visual, circular timer that guides them through each breath cycle.
+This application aims to provide a customizable breathwork training tool with a strong emphasis on intuitive and visually appealing design. Users can configure their session parameters on a dedicated setup page, and then proceed to a training page featuring a visual, circular timer that guides them through each breath cycle.
 
 ## Features
 
@@ -10,7 +10,7 @@ This application aims to provide a customizable breathwork training tool. Users 
 
 This is the initial page where users define their breathwork session. It will include:
 
-*   **Total Training Time:** An input field to set the overall duration of the breathwork session.
+*   **Total Training Time:** An input field to set the overall duration of the breathwork session, with an option for an "infinite" session.
 *   **Breath Part Timings:** Four distinct input fields to set the duration for each segment of a single breath cycle:
     *   **Inhale (In):** Time for inhaling.
     *   **Hold (Full with Air):** Time to hold breath after inhaling.
@@ -25,6 +25,7 @@ This page displays the active breathwork session with a visual timer:
 *   **Circular Timer:** A prominent circular timer representing one complete breath cycle. This circle will be dynamically divided into four segments, visually corresponding to the 'In', 'Full', 'Out', and 'Empty' breath parts configured on the previous page.
 *   **Real-time Progress:** The timer will animate to show progress through the current breath part and the overall cycle.
 *   **Cycle Repetition:** The timer will repeat for the duration of the 'Total Training Time' set on the Configuration Page.
+*   **Stop Functionality:** The ability to stop the training session at any moment.
 
 ## Getting Started
 
@@ -63,3 +64,7 @@ If your GitHub Pages site is not appearing or showing a 404 error after a succes
 4.  Under **"Build and deployment"**, ensure that **"Source"** is set to **"Deploy from a branch"**.
 5.  Under **"Branch"**, confirm it's set to `gh-pages` and the folder is `/ (root)`.
 6.  Click **"Save"** if you make any changes. It might take a few minutes for updates to propagate.
+
+## Design Philosophy
+
+Design is a core aspect of this project. The user interface should be intuitive, clean, and visually appealing. Particular attention will be paid to the aesthetics and responsiveness of the circular timer and the overall user experience.
