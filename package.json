@@ -2,7 +2,7 @@
   "name": "clock",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://frank.github.io/clock",
+  "homepage": "https://BassardF.github.io/clock",
   "dependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.1",
