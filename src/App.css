@@ -28,6 +28,9 @@
 
 .config-page div {
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
 }
 
 .config-page label {

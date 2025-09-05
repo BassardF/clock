@@ -130,6 +130,35 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
     return rotation;
   };
 
+  const indicatorAngle = (() => {
+    let currentPhaseDuration = 0;
+    let currentPhaseStartTime = 0; // Angle where the current phase starts
+
+    switch (currentPhase) {
+      case 'Inhale':
+        currentPhaseDuration = config.inhale;
+        currentPhaseStartTime = 0;
+        break;
+      case 'Hold Full':
+        currentPhaseDuration = config.holdFull;
+        currentPhaseStartTime = (config.inhale / cycleDuration) * 360;
+        break;
+      case 'Exhale':
+        currentPhaseDuration = config.exhale;
+        currentPhaseStartTime = ((config.inhale + config.holdFull) / cycleDuration) * 360;
+        break;
+      case 'Hold Empty':
+        currentPhaseDuration = config.holdEmpty;
+        currentPhaseStartTime = ((config.inhale + config.holdFull + config.exhale) / cycleDuration) * 360;
+        break;
+    }
+
+    const progressInCurrentPhase = (currentPhaseDuration - phaseTimeRemaining) / currentPhaseDuration;
+    const angleWithinPhase = progressInCurrentPhase * (currentPhaseDuration / cycleDuration) * 360;
+
+    return currentPhaseStartTime + angleWithinPhase;
+  })();
+
   return (
     <div className="training-page">
       <h1>Breathwork Session</h1>
@@ -191,6 +220,15 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
           <text x="100" y="100" textAnchor="middle" dominantBaseline="middle" className="timer-text">
             {currentPhase}
           </text>
+
+          {/* Current position indicator */}
+          <circle
+            className="indicator-dot"
+            cx={100 + radius * Math.cos((indicatorAngle * Math.PI / 180))}
+            cy={100 + radius * Math.sin((indicatorAngle * Math.PI / 180))}
+            r="5"
+            fill="white"
+          />
         </svg>
       </div>
       <p>Time in Phase: {phaseTimeRemaining.toFixed(1)}s</p>
