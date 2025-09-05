@@ -125,7 +125,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
     return elapsed;
   };
 
-  const indicatorAngle = (getElapsedTimeInCycle() / cycleDuration) * 360;
+  const indicatorAngle = (getElapsedTimeInCycle() / cycleDuration) * 360 - 90;
 
   const getLabelPosition = (phase: string) => {
     let startAngle = 0;

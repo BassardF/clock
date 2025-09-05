@@ -110,7 +110,7 @@
 
 .timer-text {
   fill: white;
-  font-size: 1.5em;
+  font-size: 2em;
   font-weight: bold;
   transform: rotate(90deg); /* Counter-rotate text */
 }
