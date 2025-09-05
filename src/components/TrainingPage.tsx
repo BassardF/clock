@@ -119,7 +119,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
       case 'Hold Empty': currentPhaseDuration = config.holdEmpty; break;
     }
     const progress = 1 - (phaseTimeRemaining / currentPhaseDuration);
-    return progress * getPhaseWidth(currentPhase);
+    return progress * 100;
   };
 
   const getCursorPosition = () => {
@@ -156,29 +156,18 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
       <h1>Breathwork Session</h1>
       <div className="linear-timer-container">
         <div className="progress-bar-segments">
+          <div className="overall-progress-fill" style={{ width: `${getCursorPosition()}%` }}></div>
           <div className="segment-bar inhale-segment-bar" style={{ width: `${getPhaseWidth('Breath In')}%` }}>
             <span className="segment-label">Breath In</span>
-            {currentPhase === 'Breath In' && (
-              <div className="progress-fill" style={{ width: `${getPhaseProgressWidth()}%` }}></div>
-            )}
           </div>
           <div className="segment-bar hold-full-segment-bar" style={{ width: `${getPhaseWidth('Hold Full')}%` }}>
             <span className="segment-label">Hold</span>
-            {currentPhase === 'Hold Full' && (
-              <div className="progress-fill" style={{ width: `${getPhaseProgressWidth()}%` }}></div>
-            )}
           </div>
           <div className="segment-bar exhale-segment-bar" style={{ width: `${getPhaseWidth('Breath Out')}%` }}>
             <span className="segment-label">Breath Out</span>
-            {currentPhase === 'Breath Out' && (
-              <div className="progress-fill" style={{ width: `${getPhaseProgressWidth()}%` }}></div>
-            )}
           </div>
           <div className="segment-bar hold-empty-segment-bar" style={{ width: `${getPhaseWidth('Hold Empty')}%` }}>
             <span className="segment-label">Hold</span>
-            {currentPhase === 'Hold Empty' && (
-              <div className="progress-fill" style={{ width: `${getPhaseProgressWidth()}%` }}></div>
-            )}
           </div>
         </div>
         <div className="cursor" style={{ left: `${getCursorPosition()}%` }}></div>
