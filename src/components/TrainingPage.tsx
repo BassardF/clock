@@ -97,7 +97,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
       case 'Breath Out': currentPhaseDuration = config.exhale; break;
       case 'Hold Empty': currentPhaseDuration = config.holdEmpty; break;
     }
-    const progress = (currentPhaseDuration - phaseTimeRemaining) / currentPhaseDuration;
+    const progress = 1 - (phaseTimeRemaining / currentPhaseDuration);
     return progress * getPhaseWidth(currentPhase);
   };
 
