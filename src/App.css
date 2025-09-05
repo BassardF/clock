@@ -15,6 +15,10 @@
   border-radius: 8px;
   background-color: #3a3f47;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 0 auto; /* Center the block horizontally */
+  max-width: 400px; /* Limit the width to prevent stretching */
+  width: 100%; /* Ensure it takes full width up to max-width */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
 }
 
 .config-page h1,
