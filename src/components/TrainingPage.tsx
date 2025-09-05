@@ -122,6 +122,35 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
     return progress * getPhaseWidth(currentPhase);
   };
 
+  const getCursorPosition = () => {
+    let currentPhaseStartTime = 0; // Percentage of total width where current phase starts
+    let currentPhaseDuration = 0;
+
+    switch (currentPhase) {
+      case 'Breath In':
+        currentPhaseStartTime = 0;
+        currentPhaseDuration = config.inhale;
+        break;
+      case 'Hold Full':
+        currentPhaseStartTime = getPhaseWidth('Breath In');
+        currentPhaseDuration = config.holdFull;
+        break;
+      case 'Breath Out':
+        currentPhaseStartTime = getPhaseWidth('Breath In') + getPhaseWidth('Hold Full');
+        currentPhaseDuration = config.exhale;
+        break;
+      case 'Hold Empty':
+        currentPhaseStartTime = getPhaseWidth('Breath In') + getPhaseWidth('Hold Full') + getPhaseWidth('Breath Out');
+        currentPhaseDuration = config.holdEmpty;
+        break;
+    }
+
+    const progressInCurrentPhase = (currentPhaseDuration - phaseTimeRemaining) / currentPhaseDuration;
+    const progressWidthInCurrentPhase = progressInCurrentPhase * getPhaseWidth(currentPhase);
+
+    return currentPhaseStartTime + progressWidthInCurrentPhase;
+  };
+
   const getFillWidth = (phase: string) => {
     // Determine the order of phases
     const phaseOrder = ['Breath In', 'Hold Full', 'Breath Out', 'Hold Empty'];
