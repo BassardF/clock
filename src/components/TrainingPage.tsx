@@ -151,7 +151,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
     }
 
     const midAngle = (startAngle + duration / 2) / cycleDuration * 360 - 90; // -90 to start from top
-    const labelRadius = radius * 0.7; // Adjust as needed
+    const labelRadius = radius * 0.85; // Adjust as needed
 
     const x = 100 + labelRadius * Math.cos(midAngle * Math.PI / 180);
     const y = 100 + labelRadius * Math.sin(midAngle * Math.PI / 180);
@@ -215,6 +215,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             textAnchor="middle"
             dominantBaseline="middle"
             className="phase-label"
+            transform="rotate(90 100 100)"
           >
             Breath In
           </text>
@@ -224,6 +225,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             textAnchor="middle"
             dominantBaseline="middle"
             className="phase-label"
+            transform="rotate(90 100 100)"
           >
             Hold
           </text>
@@ -233,6 +235,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             textAnchor="middle"
             dominantBaseline="middle"
             className="phase-label"
+            transform="rotate(90 100 100)"
           >
             Breath Out
           </text>
@@ -242,6 +245,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
             textAnchor="middle"
             dominantBaseline="middle"
             className="phase-label"
+            transform="rotate(90 100 100)"
           >
             Hold
           </text>
@@ -256,7 +260,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
           />
 
           {/* Center Current Phase Text */}
-          <text x="100" y="100" textAnchor="middle" dominantBaseline="middle" className="timer-text">
+          <text x="100" y="100" textAnchor="middle" dominantBaseline="middle" className="timer-text" transform="rotate(90 100 100)">
             {currentPhase}
           </text>
         </svg>
