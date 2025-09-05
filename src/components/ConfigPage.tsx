@@ -6,6 +6,7 @@ interface ConfigPageProps {
 
 const ConfigPage: React.FC<ConfigPageProps> = ({ onStart }) => {
   const [totalTime, setTotalTime] = useState<string>('');
+  const [isInfinite, setIsInfinite] = useState<boolean>(false);
   const [inhaleTime, setInhaleTime] = useState<string>('');
   const [holdFullTime, setHoldFullTime] = useState<string>('');
   const [exhaleTime, setExhaleTime] = useState<string>('');
@@ -15,7 +16,7 @@ const ConfigPage: React.FC<ConfigPageProps> = ({ onStart }) => {
     // Basic validation for now
     if (inhaleTime && holdFullTime && exhaleTime && holdEmptyTime) {
       onStart({
-        totalTime: totalTime === 'infinite' ? Infinity : parseInt(totalTime),
+        totalTime: isInfinite ? Infinity : parseInt(totalTime),
         inhale: parseInt(inhaleTime),
         holdFull: parseInt(holdFullTime),
         exhale: parseInt(exhaleTime),
@@ -30,13 +31,25 @@ const ConfigPage: React.FC<ConfigPageProps> = ({ onStart }) => {
     <div className="config-page">
       <h1>Breathwork Configuration</h1>
       <div>
-        <label>Total Training Time (seconds or 'infinite'):</label>
-        <input
-          type="text"
-          value={totalTime}
-          onChange={(e) => setTotalTime(e.target.value)}
-        />
+        <label>
+          <input
+            type="checkbox"
+            checked={isInfinite}
+            onChange={(e) => setIsInfinite(e.target.checked)}
+          />
+          Infinite Training Time
+        </label>
       </div>
+      {!isInfinite && (
+        <div>
+          <label>Total Training Time (seconds):</label>
+          <input
+            type="number"
+            value={totalTime}
+            onChange={(e) => setTotalTime(e.target.value)}
+          />
+        </div>
+      )}
       <div>
         <label>Inhale Time (seconds):</label>
         <input
