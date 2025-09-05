@@ -119,36 +119,25 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
       case 'Hold Empty': currentPhaseDuration = config.holdEmpty; break;
     }
     const progress = 1 - (phaseTimeRemaining / currentPhaseDuration);
-    return progress * 100;
+    return progress * getPhaseWidth(currentPhase);
   };
 
-  const getCursorPosition = () => {
-    let currentPhaseStartTime = 0; // Percentage of total width where current phase starts
-    let currentPhaseDuration = 0;
+  const getFillWidth = (phase: string) => {
+    // Determine the order of phases
+    const phaseOrder = ['Breath In', 'Hold Full', 'Breath Out', 'Hold Empty'];
+    const currentPhaseIndex = phaseOrder.indexOf(currentPhase);
+    const targetPhaseIndex = phaseOrder.indexOf(phase);
 
-    switch (currentPhase) {
-      case 'Breath In':
-        currentPhaseStartTime = 0;
-        currentPhaseDuration = config.inhale;
-        break;
-      case 'Hold Full':
-        currentPhaseStartTime = getPhaseWidth('Breath In');
-        currentPhaseDuration = config.holdFull;
-        break;
-      case 'Breath Out':
-        currentPhaseStartTime = getPhaseWidth('Breath In') + getPhaseWidth('Hold Full');
-        currentPhaseDuration = config.exhale;
-        break;
-      case 'Hold Empty':
-        currentPhaseStartTime = getPhaseWidth('Breath In') + getPhaseWidth('Hold Full') + getPhaseWidth('Breath Out');
-        currentPhaseDuration = config.holdEmpty;
-        break;
+    if (targetPhaseIndex < currentPhaseIndex) {
+      // This phase is in the past, it should be 100% filled
+      return '100%';
+    } else if (targetPhaseIndex === currentPhaseIndex) {
+      // This is the current phase, use its progress
+      return `${getPhaseProgressWidth()}%`;
+    } else {
+      // This phase is in the future, it should be 0% filled
+      return '0%';
     }
-
-    const progressInCurrentPhase = (currentPhaseDuration - phaseTimeRemaining) / currentPhaseDuration;
-    const progressWidthInCurrentPhase = progressInCurrentPhase * getPhaseWidth(currentPhase);
-
-    return currentPhaseStartTime + progressWidthInCurrentPhase;
   };
 
   return (
@@ -156,18 +145,21 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
       <h1>Breathwork Session</h1>
       <div className="linear-timer-container">
         <div className="progress-bar-segments">
-          <div className="overall-progress-fill" style={{ width: `${getCursorPosition()}%` }}></div>
           <div className="segment-bar inhale-segment-bar" style={{ width: `${getPhaseWidth('Breath In')}%` }}>
             <span className="segment-label">Breath In</span>
+            <div className="progress-fill" style={{ width: getFillWidth('Breath In') }}></div>
           </div>
           <div className="segment-bar hold-full-segment-bar" style={{ width: `${getPhaseWidth('Hold Full')}%` }}>
             <span className="segment-label">Hold</span>
+            <div className="progress-fill" style={{ width: getFillWidth('Hold Full') }}></div>
           </div>
           <div className="segment-bar exhale-segment-bar" style={{ width: `${getPhaseWidth('Breath Out')}%` }}>
             <span className="segment-label">Breath Out</span>
+            <div className="progress-fill" style={{ width: getFillWidth('Breath Out') }}></div>
           </div>
           <div className="segment-bar hold-empty-segment-bar" style={{ width: `${getPhaseWidth('Hold Empty')}%` }}>
             <span className="segment-label">Hold</span>
+            <div className="progress-fill" style={{ width: getFillWidth('Hold Empty') }}></div>
           </div>
         </div>
         <div className="cursor" style={{ left: `${getCursorPosition()}%` }}></div>
