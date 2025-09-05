@@ -1,3 +1,16 @@
+import React, { useEffect, useState, useRef } from 'react';
+
+interface TrainingPageProps {
+  config: {
+    totalTime: number;
+    inhale: number;
+    holdFull: number;
+    exhale: number;
+    holdEmpty: number;
+  };
+  onStop: () => void;
+}
+
 const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
   const [timeRemaining, setTimeRemaining] = useState(config.totalTime);
   const [currentPhase, setCurrentPhase] = useState('Breath In');
@@ -51,7 +64,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ config, onStop }) => {
         case 'Hold Empty':
           nextPhase = 'Breath In';
           nextPhaseDuration = config.inhale;
-          setCompletedCycles(prev => prev + 1); // Increment completed cycles
+          setCompletedCycles((prev: number) => prev + 1); // Increment completed cycles
           break;
       }
       setCurrentPhase(nextPhase);
