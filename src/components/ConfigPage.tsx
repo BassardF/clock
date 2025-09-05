@@ -6,11 +6,11 @@ interface ConfigPageProps {
 
 const ConfigPage: React.FC<ConfigPageProps> = ({ onStart }) => {
   const [totalTime, setTotalTime] = useState<string>('');
-  const [isInfinite, setIsInfinite] = useState<boolean>(false);
-  const [inhaleTime, setInhaleTime] = useState<string>('');
-  const [holdFullTime, setHoldFullTime] = useState<string>('');
-  const [exhaleTime, setExhaleTime] = useState<string>('');
-  const [holdEmptyTime, setHoldEmptyTime] = useState<string>('');
+  const [isInfinite, setIsInfinite] = useState<boolean>(true);
+  const [inhaleTime, setInhaleTime] = useState<string>('5');
+  const [holdFullTime, setHoldFullTime] = useState<string>('2');
+  const [exhaleTime, setExhaleTime] = useState<string>('7');
+  const [holdEmptyTime, setHoldEmptyTime] = useState<string>('1');
 
   const handleStart = () => {
     // Basic validation for now
